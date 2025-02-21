@@ -34,3 +34,14 @@ export const formatError = (error: any) => {
             : JSON.stringify(error.message)
     }
 }
+
+export const roundPrice = (price: number | string) => {
+    switch (typeof price) {
+        case 'number':
+            return Math.round((price + Number.EPSILON) * 100) / 100
+        case 'string':
+            return Math.round((Number(price) + Number.EPSILON) * 100) / 100
+        default:
+            throw new Error('Invalid price ')
+    }
+}

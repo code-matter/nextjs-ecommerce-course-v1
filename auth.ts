@@ -4,6 +4,8 @@ import { prisma } from '@/db/prisma'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { compareSync } from 'bcrypt-ts-edge'
 import type { NextAuthConfig } from 'next-auth'
+import { cookies } from 'next/headers'
+import { NextResponse } from 'next/server'
 
 export const config = {
     pages: {
@@ -74,6 +76,22 @@ export const config = {
                 }
             }
             return token
+        },
+        authorized({ request, auth }: any) {
+            if (!request.cookies.get('sessionCartId')) {
+                const sessionCartId = crypto.randomUUID()
+
+                const newReqHeaders = new Headers(request.headers)
+                const response = NextResponse.next({
+                    request: {
+                        headers: newReqHeaders,
+                    },
+                })
+                response.cookies.set('sessionCartId', sessionCartId)
+                return response
+            } else {
+                return true
+            }
         },
     },
 } satisfies NextAuthConfig

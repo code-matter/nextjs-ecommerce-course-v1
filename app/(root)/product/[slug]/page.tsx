@@ -5,6 +5,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import ProductPrice from '@/components/shared/product/product-price'
 import ProductImages from '@/components/shared/product/product-images'
 import AddToCart from '@/components/shared/product/add-to-cart'
+import { getCart } from '@/lib/actions/cart.action'
 
 const ProductDetailsPage = async ({
     params,
@@ -15,6 +16,7 @@ const ProductDetailsPage = async ({
     const product = await getProductBySlug(slug)
 
     if (!product) return notFound()
+    const cart = await getCart()
 
     return (
         <>
@@ -86,6 +88,7 @@ const ProductDetailsPage = async ({
                                                 qty: 1,
                                                 image: product.images[0],
                                             }}
+                                            cart={cart}
                                         />
                                     </div>
                                 )}
