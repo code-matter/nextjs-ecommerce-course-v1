@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 import sampleData from './sample-data'
+import { hash } from '@/lib/encrypt'
 
 const main = async () => {
     try {
@@ -11,7 +12,14 @@ const main = async () => {
         await prisma.user.deleteMany()
 
         await prisma.product.createMany({ data: sampleData.products })
-        await prisma.user.createMany({ data: sampleData.users })
+        const users: any = []
+        for (let i = 0; i < sampleData.users.length; i++) {
+            users.push({
+                ...sampleData?.users[i],
+                password: await hash(sampleData.users[i].password),
+            })
+        }
+        await prisma.user.createMany({ data: users })
     } catch (error) {
         console.error(error)
     } finally {

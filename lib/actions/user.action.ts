@@ -2,9 +2,9 @@
 import { signInFormSchema, signUpFormSchema } from '@/types/auth'
 import { signIn, signOut } from '@/auth'
 import { isRedirectError } from 'next/dist/client/components/redirect-error'
-import { hashSync } from 'bcrypt-ts-edge'
 import { prisma } from '@/db/prisma'
 import { formatError } from '@/lib/utils'
+import { hash } from '@/lib/encrypt'
 
 export const signInWithCredentials = async (
     prevState: unknown,
@@ -35,7 +35,7 @@ export const signUpUser = async (prevState: unknown, formData: FormData) => {
             password: formData.get('password') as string,
             confirmPassword: formData.get('confirmPassword') as string,
         })
-        const hashedPassword = hashSync(user.password, 10)
+        const hashedPassword = await hash(user.password)
 
         await prisma.user.create({
             data: {
