@@ -45,3 +45,20 @@ export const roundPrice = (price: number | string) => {
             throw new Error('Invalid price ')
     }
 }
+
+const CURRENCY_FORMATTER = new Intl.NumberFormat('en-CA', {
+    currency: 'CAD',
+    style: 'currency',
+    minimumFractionDigits: 2,
+})
+
+export const formatCurrency = (amount: number | string | null) => {
+    switch (typeof amount) {
+        case 'number':
+            return CURRENCY_FORMATTER.format(amount)
+        case 'string':
+            return CURRENCY_FORMATTER.format(Number(amount))
+        default:
+            return 'NaN'
+    }
+}
