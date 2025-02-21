@@ -1,9 +1,9 @@
 'use client'
 
 import { SIGN_UP_DEFAULT_VALUES } from '@/lib/constants'
-import { Input } from './ui/input'
-import { Label } from './ui/label'
-import { Button } from './ui/button'
+import { Input } from '../ui/input'
+import { Label } from '../ui/label'
+import { Button } from '../ui/button'
 import Link from 'next/link'
 import { signUpUser } from '@/lib/actions/user.action'
 import { useActionState } from 'react'

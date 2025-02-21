@@ -1,4 +1,4 @@
-import CredentialsSignInForm from '@/components/credentials-signin-form'
+import CredentialsSignInForm from '@/components/credentials/credentials-signin-form'
 import {
     Card,
     CardContent,
