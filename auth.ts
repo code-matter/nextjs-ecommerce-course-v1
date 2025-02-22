@@ -9,8 +9,8 @@ import { cookies } from 'next/headers'
 
 export const config = {
     pages: {
-        signIn: '/auth/sign-in',
-        error: '/auth/sign-in',
+        signIn: '/sign-in',
+        error: '/sign-in',
     },
     session: {
         strategy: 'jwt',
@@ -84,9 +84,9 @@ export const config = {
                             where: { sessionCartId },
                         })
                         if (sessionCart) {
-                            // await prisma.cart.deleteMany({
-                            //     where: { userId: user.id },
-                            // })
+                            await prisma.cart.deleteMany({
+                                where: { userId: user.id },
+                            })
                             await prisma.cart.update({
                                 where: { id: sessionCart.id },
                                 data: { userId: user.id },
@@ -98,6 +98,18 @@ export const config = {
             return token
         },
         authorized({ request, auth }: any) {
+            const protectedPaths = [
+                /\/shipping-address/,
+                /\/payment-method/,
+                /\/place-order/,
+                /\/profile/,
+                /\/user\/(.*)/,
+                /\/order\/(.*)/,
+                /\/admin/,
+            ]
+            const { pathname } = request.nextUrl
+            if (!auth && protectedPaths.some(p => p.test(pathname)))
+                return false
             if (!request.cookies.get('sessionCartId')) {
                 const sessionCartId = crypto.randomUUID()
 
