@@ -1,3 +1,5 @@
+import { ShippingAddress } from '@/types/shipping'
+
 export const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME || 'Prostore'
 export const APP_DESCRIPTION =
     process.env.NEXT_PUBLIC_APP_DESCRIPTION ||
@@ -17,4 +19,12 @@ export const SIGN_UP_DEFAULT_VALUES = {
     name: '',
     email: '',
     password: '',
+}
+
+export const SHIPPING_ADDRESS_DEFAULT_VALUES: ShippingAddress = {
+    fullName: 'Alex Caissy',
+    streetAdress: '123 rue Papillon',
+    city: 'Montreal',
+    postalCode: 'H0H 0H0',
+    country: 'Canada',
 }
