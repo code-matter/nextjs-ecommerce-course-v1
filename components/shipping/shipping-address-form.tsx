@@ -6,21 +6,21 @@ import { useToast } from '@/hooks/use-toast'
 import { useTransition } from 'react'
 import { shippingAddressSchema } from '@/types/shipping'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { ControllerRenderProps, Path, useForm } from 'react-hook-form'
+import { ControllerRenderProps, SubmitHandler, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { SHIPPING_ADDRESS_DEFAULT_VALUES } from '@/lib/constants'
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
     FormMessage,
 } from '../ui/form'
-import { Input } from '../ui/input'
-import { Button } from '../ui/button'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
 import { ArrowRight, Loader } from 'lucide-react'
+import { updateUserAddress } from '@/lib/actions/user.action'
 
 type Props = {
     address: ShippingAddress
@@ -36,8 +36,21 @@ const ShippingAddressForm = ({ address }: Props) => {
         defaultValues: address || SHIPPING_ADDRESS_DEFAULT_VALUES,
     })
 
-    const onSubmit = (values: ShippingAddress) => {
-        console.log('values', values)
+    const onSubmit: SubmitHandler<z.infer<typeof shippingAddressSchema>> = (
+        values: ShippingAddress,
+    ) => {
+        startTransition(async () => {
+            console.log('yo')
+            const res = await updateUserAddress(values)
+            if (!res.success) {
+                toast({
+                    variant: 'destructive',
+                    description: res.message,
+                })
+                return
+            }
+            router.push('/payment-method')
+        })
     }
 
     return (
@@ -49,7 +62,7 @@ const ShippingAddressForm = ({ address }: Props) => {
                 </p>
                 <Form {...form}>
                     <form
-                        method='post'
+                        // method='post'
                         className='space-y-4'
                         onSubmit={form.handleSubmit(onSubmit)}
                     >
@@ -83,13 +96,13 @@ const ShippingAddressForm = ({ address }: Props) => {
                         <div className='flex flex-col gap-5 md:flex-row'>
                             <FormField
                                 control={form.control}
-                                name='city'
+                                name='streetAddress'
                                 render={({
                                     field,
                                 }: {
                                     field: ControllerRenderProps<
                                         z.infer<typeof shippingAddressSchema>,
-                                        'city'
+                                        'streetAddress'
                                     >
                                 }) => (
                                     <FormItem className='w-full'>
@@ -187,6 +200,7 @@ const ShippingAddressForm = ({ address }: Props) => {
                                 )}
                             />
                         </div>
+
                         <div className='flex gap-2'>
                             <Button type='submit' disabled={isPending}>
                                 {isPending ? (

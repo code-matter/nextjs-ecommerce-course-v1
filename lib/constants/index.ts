@@ -22,9 +22,9 @@ export const SIGN_UP_DEFAULT_VALUES = {
 }
 
 export const SHIPPING_ADDRESS_DEFAULT_VALUES: ShippingAddress = {
-    fullName: 'Alex Caissy',
-    streetAdress: '123 rue Papillon',
-    city: 'Montreal',
-    postalCode: 'H0H 0H0',
-    country: 'Canada',
+    fullName: '',
+    streetAddress: '',
+    city: '',
+    postalCode: '',
+    country: '',
 }
